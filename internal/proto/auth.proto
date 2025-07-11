@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "distributed-file-sync/internal/proto";
+
+service AuthService {
+  rpc SignUp(SignUpRequest) returns (AuthResponse);
+  rpc SignIn(SignInRequest) returns (AuthResponse);
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
+}
+
+message SignUpRequest {
+  string email = 1;
+  string password = 2;
+  string username = 3;
+}
+
+message SignInRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  string token = 1;
+  string user_id = 2;
+  string message = 3;
+}
+
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+message ValidateTokenResponse {
+  bool valid = 1;
+  string user_id = 2;
+} 
