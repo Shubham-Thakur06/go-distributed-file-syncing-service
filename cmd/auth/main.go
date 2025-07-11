@@ -40,6 +40,6 @@ func main() {
 
 	log.Println("Starting Auth Service on port", config.AuthServicePort)
 	if err := server.Serve(lis); err != nil {
-		log.Fatal("Failed to serve")
+		log.Fatal("Failed to serve:", err)
 	}
 }

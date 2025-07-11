@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "distributed-file-sync/internal/proto";
+
+service FileService {
+  rpc UploadFile(stream FileUploadRequest) returns (FileUploadResponse);
+  rpc DownloadFile(FileDownloadRequest) returns (stream FileDownloadResponse);
+  rpc GetFileMetadata(FileMetadataRequest) returns (FileMetadataResponse);
+  rpc ListFiles(ListFilesRequest) returns (ListFilesResponse);
+}
+
+message FileChunk {
+  bytes content = 1;
+  string file_id = 2;
+  string file_name = 3;
+  int64 chunk_index = 4;
+  int64 total_chunks = 5;
+  string user_id = 6;
+  string device_id = 7;
+}
+
+message UploadResponse {
+  string file_id = 1;
+  string version_id = 2;
+  string message = 3;
+}
+
+message DownloadRequest {
+  string file_id = 1;
+  string version_id = 2;
+  string user_id = 3;
+}
+
+message FileMetadataRequest {
+  string file_id = 1;
+  string user_id = 2;
+}
+
+message FileMetadataResponse {
+  string file_id = 1;
+  string file_name = 2;
+  int64 size = 3;
+  string content_type = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  string version_id = 7;
+  string owner_id = 8;
+  repeated string shared_with = 9;
+}
+
+message ListFilesRequest {
+  string user_id = 1;
+  string folder_path = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+message ListFilesResponse {
+  repeated FileMetadataResponse files = 1;
+  int32 total_count = 2;
+}
+
+message FileUploadRequest {
+    string user_id = 1;
+    string device_id = 2;
+    string file_name = 3;
+    bytes content = 4;
+    string file_id = 5;
+}
+
+message FileUploadResponse {
+    string file_id = 1;
+    string message = 2;
+}
+
+message FileDownloadRequest {
+    string file_id = 1;
+    string user_id = 2;
+}
+
+message FileDownloadResponse {
+    bytes content = 1;
+    string error = 2;
+} 

@@ -23,8 +23,9 @@ type Config struct {
 	AWSBucketName      string
 
 	// Service
-	JWTSecret       string
-	AuthServicePort int
+	JWTSecret          string
+	AuthServicePort    int
+	GatewayServicePort int
 }
 
 func LoadConfig() (*Config, error) {
