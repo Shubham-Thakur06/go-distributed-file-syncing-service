@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -26,6 +27,11 @@ type Config struct {
 	JWTSecret          string
 	AuthServicePort    int
 	GatewayServicePort int
+	SyncServicePort    int
+
+	// Kafka Configuration
+	KafkaBrokers []string
+	KafkaGroupID string
 }
 
 func LoadConfig() (*Config, error) {
@@ -49,6 +55,10 @@ func LoadConfig() (*Config, error) {
 	// Service configuration
 	config.JWTSecret = getEnvString("JWT_SECRET", "")
 	config.AuthServicePort = getEnvInt("AUTH_SERVICE_PORT", 50051)
+
+	// Kafka configuration
+	config.KafkaBrokers = strings.Split(getEnvString("KAFKA_BROKERS", "localhost:9092"), ",")
+	config.KafkaGroupID = getEnvString("KAFKA_GROUP_ID", "file_sync_group")
 
 	if err := config.validate(); err != nil {
 		return nil, err

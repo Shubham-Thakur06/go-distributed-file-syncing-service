@@ -816,7 +816,7 @@ const file_internal_proto_file_proto_rawDesc = "" +
 	"UploadFile\x12\x18.proto.FileUploadRequest\x1a\x19.proto.FileUploadResponse(\x01\x12I\n" +
 	"\fDownloadFile\x12\x1a.proto.FileDownloadRequest\x1a\x1b.proto.FileDownloadResponse0\x01\x12J\n" +
 	"\x0fGetFileMetadata\x12\x1a.proto.FileMetadataRequest\x1a\x1b.proto.FileMetadataResponse\x12>\n" +
-	"\tListFiles\x12\x17.proto.ListFilesRequest\x1a\x18.proto.ListFilesResponseB&Z$distributed-file-sync/internal/protob\x06proto3"
+	"\tListFiles\x12\x17.proto.ListFilesRequest\x1a\x18.proto.ListFilesResponseBPZNgithub.com/Shubham-Thakur06/go-distributed-file-syncing-service/internal/protob\x06proto3"
 
 var (
 	file_internal_proto_file_proto_rawDescOnce sync.Once

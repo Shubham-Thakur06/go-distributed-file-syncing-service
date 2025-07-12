@@ -22,13 +22,13 @@ func main() {
 	db := utils.InitDB(config)
 	sqlDB, err := db.DB()
 	if err != nil {
-		log.Fatal("Failed to get underlying DB connection")
+		log.Fatalf("Failed to get underlying DB connection: %v", err)
 	}
 	defer sqlDB.Close()
 
 	s3Client, err := utils.NewS3Client(context.Background(), config.AWSRegion, config.AWSBucketName)
 	if err != nil {
-		log.Fatal("Failed to initialize S3 client")
+		log.Fatalf("Failed to initialize S3 client: %v", err)
 	}
 
 	server := grpc.NewServer()
@@ -38,11 +38,11 @@ func main() {
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.GatewayServicePort))
 	if err != nil {
-		log.Fatal("Failed to listen on port", config.GatewayServicePort)
+		log.Fatalf("Failed to listen on port %d: %v", config.GatewayServicePort, err)
 	}
 
 	log.Println("Starting Gateway Service on port ", config.GatewayServicePort)
 	if err := server.Serve(lis); err != nil {
-		log.Fatal("Failed to serve:", err)
+		log.Fatalf("Failed to serve: %v", err)
 	}
 }

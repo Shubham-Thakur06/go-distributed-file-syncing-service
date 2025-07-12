@@ -313,7 +313,7 @@ const file_internal_proto_auth_proto_rawDesc = "" +
 	"\vAuthService\x123\n" +
 	"\x06SignUp\x12\x14.proto.SignUpRequest\x1a\x13.proto.AuthResponse\x123\n" +
 	"\x06SignIn\x12\x14.proto.SignInRequest\x1a\x13.proto.AuthResponse\x12J\n" +
-	"\rValidateToken\x12\x1b.proto.ValidateTokenRequest\x1a\x1c.proto.ValidateTokenResponseB&Z$distributed-file-sync/internal/protob\x06proto3"
+	"\rValidateToken\x12\x1b.proto.ValidateTokenRequest\x1a\x1c.proto.ValidateTokenResponseBPZNgithub.com/Shubham-Thakur06/go-distributed-file-syncing-service/internal/protob\x06proto3"
 
 var (
 	file_internal_proto_auth_proto_rawDescOnce sync.Once

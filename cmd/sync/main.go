@@ -5,12 +5,11 @@ import (
 	"log"
 	"net"
 
-	"github.com/Shubham-Thakur06/go-distributed-file-syncing-service/internal/auth"
 	"github.com/Shubham-Thakur06/go-distributed-file-syncing-service/internal/proto"
+	"github.com/Shubham-Thakur06/go-distributed-file-syncing-service/internal/sync"
 	"github.com/Shubham-Thakur06/go-distributed-file-syncing-service/internal/utils"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -26,19 +25,23 @@ func main() {
 	}
 	defer sqlDB.Close()
 
+	kafka, err := utils.NewKafkaClient(config.KafkaBrokers)
+	if err != nil {
+		log.Fatalf("Failed to initialize Kafka client: %v", err)
+	}
+	defer kafka.Close()
+
 	server := grpc.NewServer()
 
-	authService := auth.NewAuthService(db, config.JWTSecret)
-	proto.RegisterAuthServiceServer(server, authService)
+	syncService := sync.NewSyncService(db, kafka)
+	proto.RegisterSyncServiceServer(server, syncService)
 
-	reflection.Register(server)
-
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.AuthServicePort))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.SyncServicePort))
 	if err != nil {
-		log.Fatalf("Failed to listen on port %d: %v", config.AuthServicePort, err)
+		log.Fatalf("Failed to listen on port %d: %v", config.SyncServicePort, err)
 	}
 
-	log.Println("Starting Auth Service on port", config.AuthServicePort)
+	log.Println("Starting Sync service on port", config.SyncServicePort)
 	if err := server.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}

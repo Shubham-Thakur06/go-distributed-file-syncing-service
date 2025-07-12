@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/Shubham-Thakur06/go-distributed-file-syncing-service/internal/proto";
+
+service SyncService {
+  rpc SyncFile(SyncRequest) returns (SyncResponse);
+  rpc GetFileVersions(FileVersionRequest) returns (FileVersionResponse);
+  rpc ResolveConflict(ConflictResolutionRequest) returns (ConflictResolutionResponse);
+  rpc WatchFileChanges(WatchRequest) returns (stream FileChangeEvent);
+}
+
+message SyncRequest {
+  string file_id = 1;
+  string user_id = 2;
+  string device_id = 3;
+  string file_hash = 4;
+  int64 file_size = 5;
+  string last_modified = 6;
+}
+
+message SyncResponse {
+  enum SyncStatus {
+    SYNCED = 0;
+    CONFLICT = 1;
+    NEEDS_UPDATE = 2;
+    ERROR = 3;
+  }
+  SyncStatus status = 1;
+  string message = 2;
+  string latest_version_id = 3;
+}
+
+message FileVersionRequest {
+  string file_id = 1;
+  string user_id = 2;
+}
+
+message FileVersion {
+  string version_id = 1;
+  string created_at = 2;
+  string device_id = 3;
+  int64 size = 4;
+  string hash = 5;
+}
+
+message FileVersionResponse {
+  repeated FileVersion versions = 1;
+}
+
+message ConflictResolutionRequest {
+  string file_id = 1;
+  string user_id = 2;
+  string winning_version_id = 3;
+  repeated string losing_version_ids = 4;
+}
+
+message ConflictResolutionResponse {
+  bool success = 1;
+  string message = 2;
+  string new_version_id = 3;
+}
+
+message WatchRequest {
+  string user_id = 1;
+  string device_id = 2;
+  repeated string folder_paths = 3;
+}
+
+message FileChangeEvent {
+  enum ChangeType {
+    CREATED = 0;
+    MODIFIED = 1;
+    DELETED = 2;
+    RENAMED = 3;
+  }
+  string file_id = 1;
+  string file_path = 2;
+  ChangeType change_type = 3;
+  string timestamp = 4;
+  string device_id = 5;
+  string version_id = 6;
+} 
